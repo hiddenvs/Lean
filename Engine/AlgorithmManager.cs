@@ -231,8 +231,10 @@ namespace QuantConnect.Lean.Engine
                     {
                         SampleBenchmark(algorithm, results, _previousTime.Date);
 
+                        var currentPortfolioValue = algorithm.Portfolio.TotalPortfolioValue;
+
                         //Sample the portfolio value over time for chart.
-                        results.SampleEquity(_previousTime, Math.Round(algorithm.Portfolio.TotalPortfolioValue, 4));
+                        results.SampleEquity(_previousTime, Math.Round(currentPortfolioValue, 4));
 
                         //Check for divide by zero
                         if (portfolioValue == 0m)
@@ -241,9 +243,9 @@ namespace QuantConnect.Lean.Engine
                         }
                         else
                         {
-                            results.SamplePerformance(_previousTime.Date, Math.Round((algorithm.Portfolio.TotalPortfolioValue - portfolioValue) * 100 / portfolioValue, 10));
+                            results.SamplePerformance(_previousTime.Date, Math.Round((currentPortfolioValue - portfolioValue) * 100 / portfolioValue, 10));
                         }
-                        portfolioValue = algorithm.Portfolio.TotalPortfolioValue;
+                        portfolioValue = currentPortfolioValue;
                     }
 
                     if (portfolioValue <= 0)
